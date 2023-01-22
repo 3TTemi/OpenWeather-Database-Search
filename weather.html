@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Weather Map Data</title>
+    <style>
+        textarea {
+            width: 300px;
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Open Weather via Ajax</h1>
+    <b>Enter Zip Code: </b> <input type="text" id="zip"> <input type="button" id="wetButton" value="Get Weather"> <input
+        type="button" id="clearButton" value="Clear">
+    <br> <br><textarea id="textBox"></textarea>
+
+    <script>
+        function getWeather() {
+            var zipcode = document.getElementById("zip").value;
+            fetch('https://api.openweathermap.org/data/2.5/weather?zip=' + zipcode + ',us&units=imperial&APPID=18de2dc1085208a4d9c52eba79596e6f')
+                .then((response) => response.json())
+                .then((jsonResult) => displayWeather(jsonResult))
+                .catch(notifyError);
+
+        }
+
+        function displayWeather(jsonResult) {
+            var textBox = document.getElementById("textBox");
+            textBox.value += jsonResult.name + ": " + jsonResult.main.temp + '\n';
+            // textBox.innerHTML += '<p> Hellow </p>;';
+
+        }
+
+        function notifyError(err) {
+            document.getElementById("textBox").value = "Something went wrong, try entering the zip code again";
+        }
+
+        document.getElementById("wetButton").addEventListener("click", getWeather);
+        document.getElementById("clearButton").addEventListener("click", () => document.getElementById("textBox").value = "");
+
+
+    </script>
+</body>
+
+</html>
